@@ -4,7 +4,7 @@ In this package you will find the unmanaged package that we use to deploy the Lo
 
 #### Setup Instructions
 1. Install `ant` through `homebrew` (`brew install ant`)
-2. Update the `build.properties` file with the username and password (including security token if needed).
+2. Create a `build.properties` using the `example.build.properties` file with the username and password (including security token if needed).
 
 
 #### Deploy
