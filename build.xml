@@ -1,0 +1,25 @@
+<project name="Abbott Sync Salesforce Module" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties"/>
+    <property environment="env"/>
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="ant-salesforce.jar" />
+        </classpath>
+    </taskdef>
+
+
+    <!-- Retrieve metadata for all the packages specified under packageNames -->
+    <target name="Retrieve">
+      <delete dir="retrieve" />
+      <mkdir dir="retrieve" />
+      <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" retrieveTarget="retrieve" packageNames="${sf.pkgName}"/>
+    </target>
+
+    <!-- Deploy the unpackaged set of metadata retrieved with retrieveUnpackaged -->
+    <target name="Deploy">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="src/" rollbackOnError="true"/>
+    </target>
+
+</project>

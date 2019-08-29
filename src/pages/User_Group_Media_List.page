@@ -1,0 +1,257 @@
+<apex:page lightningStyleSheets="true" controller="UserGroupMediaListController">
+    <apex:slds />
+    <apex:includeLightning />
+    
+    <style type="text/css">
+        .content { 
+        	padding: 10px; 
+        	position: fixed;
+        	top: 0;
+        	bottom: 0;
+        	left: 0;
+        	right: 0;
+        	background-color: rgb(176, 196, 223);
+        }
+        .slds-brand-band {
+        	position: fixed !important;
+        	top: 0;
+        	left: 0;
+        	right: 0;
+        	height: initial !important;
+        	z-index: -1;
+        }
+        
+        .header-container {
+        	display: flex;
+        	flex-direction: column;
+        	width: 100%;
+        }
+        
+        .header-options-row {
+        	display: flex;
+        	flex-direction: row;
+        }
+        
+        .header-options-left { flex-grow: 1; }
+        
+        .header-info-section { display: inline-flex; align-items: center; }
+        
+        .header-info-section > select { margin: 0 5px; }
+        
+        .header-info-section ~ .header-info-section::before {
+        	content: '•';
+        	padding-right: 5px;
+        }
+        
+        .apexp {
+            width: 100% !important;
+        }
+        .apexp > div:first-of-type {
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        	background-color: transparent !important;
+        }
+        
+        .slds-button.disabled {
+        	pointer-events: none;
+        	color: #dddbda;
+        }
+        
+        .hidden {
+        	display: none;
+        }
+        
+        .data-section, 
+        .header-options-row,
+        .footer-nav { 
+        	margin-top: 10px; 
+        }
+        
+        .slds-icon_container {
+        	background-color: #DF4760;
+        }
+    </style>
+    <div class="slds-scope" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <div class="content">
+            <apex:form >
+                <div class="slds-brand-band slds-brand-band_medium"></div>
+                <div class="slds-page-header slds-page-header_record-home">
+                    <div class="header-container slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container">
+                                        <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                            <!--use xlink:href="/apexpages/slds/latest/assets/icons/custom-sprite/svg/symbols.svg#custom3"></use-->
+                                            <use xlink:href="{!$Resource.loop_media_icon}"></use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span>Loop Media</span>
+                                                <span class="slds-page-header__title slds-truncate" title="All Media">All Media</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Search, Filter, Page Size --> 
+                        <div class="header-options-row">
+                            <div class="header-options-left">
+                                <div class="header-info-section">
+                                    <span>Show</span>
+                                    <apex:selectList value="{!pageSize}" multiselect="false" size="1">
+                                        <apex:actionSupport event="onchange" rerender="renderedData,searchBox,navActions"/>
+                                        <apex:selectOptions value="{!pageSizes}"/>
+                                    </apex:selectList>
+                                    <span>Entries per Page</span>
+                                </div>
+                                <div class="header-info-section">
+	                                <span>Sorted by Title</span>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right">
+                                    <svg class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default" aria-hidden="true">
+                                        <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                                    </svg>
+                                    <apex:pageBlock id="searchBox">
+                                        <apex:inputText value="{!searchString}" label="Search Media" styleClass="slds-input search-text-box" html-placeholder="Search Media..." onkeypress="return onSearchKeyPress(event)" onkeyup="updateSearchClearVisibility();"/>
+                                    </apex:pageBlock>
+                                    <apex:commandButton action="{!search}" styleClass="search-button" reRender="renderedData,navActions" style="display:none;"/>
+                                    <apex:commandLink action="{!clearSearch}" styleClass="clear-search-button hidden" reRender="renderedData,searchBox,navActions">
+                                        <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Clear" onclick="hideSearchClearButton();">
+                                            <svg class="slds-button__icon slds-icon-text-light" aria-hidden="true">
+                                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#clear"></use>
+                                            </svg>
+                                            <span class="slds-assistive-text">Clear</span>
+                                        </button>
+                                    </apex:commandLink>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Table -->
+                    
+                    <div class="data-section slds-page-header__row slds-page-header__row_gutters">
+                        <apex:pageBlock id="renderedData">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Name">Name</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Assent Number">Asset Number</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Title">Title</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Type">Type</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Sync Date">Sync Date</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!loopMedia}" var="lm">
+                                        <tr class="slds-hint-parent">
+                                            <th data-label="Name" scope="row">
+                                                <div class="slds-truncate" title="{! lm.Name}">
+                                                    <apex:outputLink value="/{!lm.Id}">{!lm.Name}</apex:outputLink>
+                                                </div>
+                                            </th>
+                                            <td data-label="Asset Number">
+                                                <div class="slds-truncate" title="{! lm.Asset_Number__c}">{! lm.Asset_Number__c}</div>
+                                            </td>
+                                            <td data-label="Title">
+                                                <div class="slds-truncate" title="{! lm.Title__c}">{! lm.Title__c}</div>
+                                            </td>
+                                            <td data-label="Type">
+                                                <div class="slds-truncate" title="{! lm.Type__c}">{! lm.Type__c}</div>
+                                            </td>
+                                            <td data-label="Sync Date">
+                                                <div class="slds-truncate" title="{! lm.LastModifiedDate}">
+                                                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy h':'mm a}">
+                                                        <apex:param value="{! lm.LastModifiedDate}" /> 
+                                                    </apex:outputText>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:pageBlock>
+                    </div>
+                    
+                    <apex:pageBlock id="navActions">
+                        <div class="slds-button-group footer-nav" role="group">
+                            <apex:commandLink styleClass="slds-button slds-button_neutral {!IF(hasPrevious,'','disabled')}" action="{! first }" value="First" reRender="renderedData,navActions"/>
+                            <apex:commandLink styleClass="slds-button slds-button_neutral {!IF(hasPrevious,'','disabled')}" action="{! previous }" value="Previous" reRender="renderedData,navActions"/>
+                            <apex:commandLink styleClass="slds-button slds-button_neutral {!IF(hasNext,'','disabled')}" action="{! next }" value="Next" reRender="renderedData,navActions"/>
+                            <apex:commandLink styleClass="slds-button slds-button_neutral {!IF(hasNext,'','disabled')}" action="{! last }" value="Last" reRender="renderedData,navActions"/>
+                        </div>
+                    </apex:pageBlock>
+                </div>
+            </apex:form>
+        </div>
+	</div>
+ 
+     <script type="text/javascript">    
+        function updateSearchClearVisibility(){
+            var searchBox = document.querySelector('.search-text-box');
+            
+            if (searchBox && searchBox.value && searchBox.value.length > 0) {
+                showSearchClearButton();
+            }
+            else {
+                hideSearchClearButton();
+            }  
+        }
+    
+    	function onSearchKeyPress(e){
+          var key = 0;
+            
+          if (window.event){
+            key = e.keyCode;
+          }
+          else if (e.which){
+          	key = e.which;
+          }
+            
+          if (key == 13){
+            e.preventDefault();
+            
+           	var searchButton = document.querySelector('.search-button'); 
+            searchButton.click();
+           
+            return false;
+          }
+          else {              
+          	return true;    
+          }
+        }
+
+    	function hideSearchClearButton() {
+            var clearSearchButton = document.querySelector('.clear-search-button');
+            clearSearchButton.classList.add('hidden');
+        }
+    
+    	function showSearchClearButton() {
+            var clearSearchButton = document.querySelector('.clear-search-button');
+            clearSearchButton.classList.remove('hidden');
+        }
+
+	</script>
+</apex:page>
