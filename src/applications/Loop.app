@@ -13,7 +13,6 @@
     <label>Loop</label>
     <navType>Standard</navType>
     <tabs>Loop_Media</tabs>
-    <tabs>Loop_Media__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Loop_UtilityBar</utilityBar>
 </CustomApplication>

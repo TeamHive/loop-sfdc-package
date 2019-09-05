@@ -42,7 +42,6 @@
     </types>
     <types>
         <members>Loop_Media</members>
-        <members>Loop_Media__c</members>
         <name>CustomTab</name>
     </types>
     <types>
@@ -60,7 +59,6 @@
     </types>
     <types>
         <members>Loop_Connector_Integration_Permissions</members>
-        <members>Loop_Connector_View_All_Media</members>
         <members>Loop_Connector_View_Media</members>
         <name>PermissionSet</name>
     </types>
