@@ -1,4 +1,4 @@
-<project name="Abbott Sync Salesforce Module" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
+<project name="Sync Salesforce Module" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
 
     <property file="build.properties"/>
     <property environment="env"/>

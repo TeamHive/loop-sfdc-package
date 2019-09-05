@@ -71,6 +71,16 @@
         
         .slds-icon_container {
         	background-color: #DF4760;
+            display: inline-flex !important;
+        	align-items: center;
+        	justify-content: center;
+        	height: 32px;
+        	width: 32px;
+        }
+        
+        .slds-icon_container img {
+            max-width: initial;
+    		height: 20px;
         }
     </style>
     <div class="slds-scope" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -83,10 +93,7 @@
                             <div class="slds-media">
                                 <div class="slds-media__figure">
                                     <span class="slds-icon_container">
-                                        <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
-                                            <!--use xlink:href="/apexpages/slds/latest/assets/icons/custom-sprite/svg/symbols.svg#custom3"></use-->
-                                            <use xlink:href="{!$Resource.loop_media_icon}"></use>
-                                        </svg>
+                                        <apex:image url="{!$Resource.LoopContent}"/>
                                     </span>
                                 </div>
                                 <div class="slds-media__body">
