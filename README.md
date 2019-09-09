@@ -66,7 +66,7 @@ Connected App Name | Loop Salesforce Connector
 API Name | _Use Default_
 Contact Email | dev@meetmaestro.com
 Enable OAuth Settings | `true`
-Callback URL | https://www.myloopaccount.com/api/v1/integrations/salesforce/auth-callback
+Callback URL | https://www.myloopaccount.com/api/v1/admin/integrations/salesforce/auth-callback
 Selected OAuth Scopes | Access and manage your data (api) <br> Access custom permissions (custom_permissions) <br> Allow access to your unique identifier (openid) <br> Perform requests on your behalf at any time (refresh_token, offline_access)
 Require Secret for<br>Web Server Flow | `false`
 
