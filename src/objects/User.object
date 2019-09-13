@@ -4,9 +4,19 @@
         <fullName>Loop_Groups__c</fullName>
         <externalId>false</externalId>
         <label>Loop Groups</label>
-        <length>131072</length>
+        <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
-        <type>LongTextArea</type>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>All Access</fullName>
+                    <default>false</default>
+                    <label>All Access</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
         <visibleLines>4</visibleLines>
     </fields>
 </CustomObject>
