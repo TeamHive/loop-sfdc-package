@@ -365,11 +365,6 @@
         </valueSet>
     </fields>
     <label>Loop Media</label>
-    <listViews>
-        <fullName>All</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All</label>
-    </listViews>
     <nameField>
         <displayFormat>LM-{00000}</displayFormat>
         <label>Name</label>
