@@ -1,0 +1,387 @@
+<apex:page lightningStyleSheets="true" controller="LoopMediaWidgetController">
+    <apex:slds />
+    <apex:includeLightning />
+    
+    <style type="text/css">
+        .slds-scope {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            
+            --header-item-height: 24px;
+        }
+        
+        [aria-disabled="true"]{
+        	pointer-events: none;
+        }
+        
+        form {
+            height: 100%;
+            position: relative;
+        }
+        
+        .header-row {
+            display: flex;
+            align-items: center;
+        }
+        
+        .slds-icon_container {
+            background-color: #DF4760;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            height: var(--header-item-height);
+            width: var(--header-item-height);
+        }
+        
+        .slds-icon_container img {
+            max-width: initial;
+            height: 18px;
+        }
+        
+        .header-text-container {
+            flex-grow: 1;
+            margin-right: 10px;	
+        }
+        .header-text-container > a {
+        	display: flex;
+        	flex-direction: column;
+        }
+        
+        .header-text {
+            font-size: 16px;
+        }
+        .header-subtext {
+        	font-size: 12px;
+        	font-weight: normal;
+        	line-height: 1em;
+        }
+        
+        [id*="tableSearchBox"],
+        [id*="tableSearchBox"] * {
+        	height: var(--header-item-height) !important;
+        }
+        
+        [id*="externalFilterOption"] input {
+        	margin-right: 0 !important;
+        	cursor: pointer; 
+        }
+        [id*="externalFilterOption"] {
+        	padding: 0 2px;
+        	margin-right: 5px;
+        	cursor: initial;
+        }
+        
+        .table-search-box input {
+            min-height: var(--header-item-height) !important;
+            line-height: 1em !important;
+        }
+        
+        .apexp {
+        	width: 100% !important;
+        }
+        .apexp > div:first-of-type {
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background-color: transparent !important;
+        }
+        
+        .data-section {
+        	margin-top: 10px;
+            position: absolute;
+            top: 36px;
+            left: 0;
+            right: 0;
+            bottom: 20px;
+        }
+        .data-section .pbBody {
+        	overflow: initial;
+        }
+        .data-section td:last-child {
+        	width: 1.5rem;
+        	padding-right: 10px !important;
+        }
+        
+        .cta {
+			display: none;
+        }
+        
+        .cta .cta-text {
+        	font-size: 16px;
+        }
+        
+        .cta > * + * {
+        	margin-top: 10px;
+        }
+        
+        .cta.no-location > *:nth-child(n+2) {
+       		display: none;
+        }
+        
+        .cta .or {
+        	color: rgb(172, 172, 194);
+        	text-transform: uppercase;
+        	font-size: 12px;
+        	font-weight: 500;
+        }
+        
+        .browse-in-loop-icon {
+        	fill: currentcolor;
+        	height: 0.8em;
+        	width: 0.8em;
+        	display: inline-flex;
+        	align-items: center;
+        	margin-left: 2px;
+        	margin-bottom: 2px;
+        }
+        
+        .show-cta .cta {
+        	display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .show-cta .cta + * {
+        	display: none;
+        }
+        
+        .footer {
+            display: flex;
+            align-items: center;	
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 20px;
+        }
+        
+        .slds-button.action-list-button {
+        	width: 1.4rem;
+        	height: 1.4rem;
+        }
+        
+        .action-list-button img {
+			height: 7px;
+        	pointer-events: none;
+        }
+    </style>
+    <div class="slds-scope" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <apex:form >
+            <div class="header-row">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container">
+                        <apex:image url="{!$Resource.LoopLogoWhite}"/>
+                    </span>
+                </div>
+                <div class="header-text-container">
+                    <a class="slds-card__header-link baseCard__header-title-container" href="/lightning/n/Loop_Media">
+                        <span class="header-text">
+                            Loop
+                        </span>
+                        
+                        <span class="header-subtext">
+                            {!widgetSubtitle}
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="slds-form-element table-search-box">
+                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right">
+                        <svg class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default" aria-hidden="true">
+                            <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                        </svg>
+                        <apex:pageBlock id="searchBox">
+                            <apex:inputText value="{!searchString}" label="Search for content" styleClass="slds-input search-text-box" html-placeholder="Search" onkeypress="return onSearchKeyPress(event)" onkeyup="updateSearchClearVisibility();"/>
+                        </apex:pageBlock>
+                        <apex:commandButton action="{!search}" styleClass="search-button" reRender="renderedData,externalFilterOption" style="display:none;"/>
+                        <apex:commandLink action="{!clearSearch}" styleClass="clear-search-button hidden" reRender="renderedData,searchBox,externalFilterOption">
+                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Clear" onclick="hideSearchClearButton();">
+                                <svg class="slds-button__icon slds-icon-text-light" aria-hidden="true">
+                                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#clear"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Clear</span>
+                            </button>
+                        </apex:commandLink>
+                    </div>
+                </div>
+            </div>
+            <apex:pageBlock id="renderedData">
+            <div class="data-section slds-page-header__row {!IF(showCta, 'show-cta', '')}">
+                
+                    <div class="cta {!IF(browseLoopLocation == null, 'no-location', '')}">
+                        <div class="cta-text">Search for {!IF(widgetSubtitle == null, 'content', widgetSubtitle)}</div>
+                        <div class="or">or</div>
+                        <a href="{!browseLoopLocation}" target="_blank">Browse in Loop<svg class="browse-in-loop-icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#new_window"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Title">Title</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Type">Type</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Actions"></div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!loopMedia}" var="lm">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="Title" scope="row">
+                                        <div class="slds-truncate" title="{! lm.Title__c}">
+                                            <a href="/{!lm.Id}" target="_blank">{!lm.Title__c}</a>
+                                        </div>
+                                    </td>
+                                    <td data-label="Type">
+                                        <div class="slds-truncate" title="{! lm.Type__c}">{! lm.Type__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-dropdown-trigger slds-dropdown-trigger_click">
+                                            <button class="slds-button slds-button_icon-border action-list-button" aria-haspopup="true" type="button" onclick="onOptionsButtonClicked(this)">
+                                                <apex:image url="{!$Resource.DownArrow }"/>
+                                                <span class="slds-assistive-text">Show actions</span>
+                                            </button>
+                                            <div class="slds-dropdown slds-dropdown_right">
+                                                <ul class="dropdown__list" role="menu">
+                                                    <li class="slds-dropdown__item" role="presentation">
+                                                        <a href="javascript:void(0)" role="menuitem" tabindex="-1" 
+                                                           aria-disabled="{!IF(lm.Is_Externally_Shareable__c, 'false', 'true')}" 
+                                                           onclick="copyToClipboard('{!lm.Shareable_Link__c}')">
+                                                            <span>Copy Share Link</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="slds-dropdown__item" role="presentation">
+                                                        <a href="{!lm.Download_Link__c }" target="_blank" role="menuitem" tabindex="-1" 
+                                                           aria-disabled="{!IF(lm.Can_Download__c, 'false', 'true')}">
+                                                            <span>Download</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="slds-dropdown__item" role="presentation">
+                                                        <a href="{!lm.Internal_Loop_Link__c}" target="_blank" role="menuitem" tabindex="-1">
+                                                            <span>View in Loop</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                
+            </div>
+            </apex:pageBlock>
+            <div class="footer">
+                <apex:pageBlock id="externalFilterOption">
+                    <apex:commandLink action="{!search}" reRender="renderedData,searchBox,externalFilterOption">
+                        <apex:inputCheckbox value="{!externalContentOnly}"/>
+                    </apex:commandLink>
+                    Sharable content only
+                </apex:pageBlock>
+            </div>
+        </apex:form>
+    </div>
+    
+    <script type="text/javascript">    
+        function updateSearchClearVisibility(){
+            var searchBox = document.querySelector('.search-text-box');
+            
+            if (searchBox && searchBox.value && searchBox.value.length > 0) {
+                showSearchClearButton();
+            }
+            else {
+                hideSearchClearButton();
+            }  
+        }
+        
+        function onSearchKeyPress(e){
+            var key = 0;
+            
+            if (window.event){
+                key = e.keyCode;
+            }
+            else if (e.which){
+                key = e.which;
+            }
+            
+            if (key == 13){
+                e.preventDefault();
+                
+                var searchButton = document.querySelector('.search-button'); 
+                searchButton.click();
+                
+                return false;
+            }
+            else {              
+                return true;    
+            }
+        }
+        
+        function hideSearchClearButton() {
+            var clearSearchButton = document.querySelector('.clear-search-button');
+            clearSearchButton.classList.add('hidden');
+        }
+        
+        function showSearchClearButton() {
+            var clearSearchButton = document.querySelector('.clear-search-button');
+            clearSearchButton.classList.remove('hidden');
+        }
+        
+        function onOptionsButtonClicked(clickedElement) {
+            var allOpen = document.querySelectorAll('.data-section [aria-expanded="true"]');
+           
+            allOpen.forEach(function(openElement) {
+                if (openElement !== clickedElement) {
+                    toggleItemActionList(openElement);
+                }
+            });
+            
+            if (clickedElement != null) {
+                toggleItemActionList(clickedElement);
+            }
+        }
+        
+        function toggleItemActionList(buttonElement) {
+            var attributeName = 'aria-expanded';
+            var isOpenClass = 'slds-is-open';
+            
+            var expanded = buttonElement.getAttribute(attributeName) == 'true';            
+            buttonElement.setAttribute(attributeName, expanded === true ? 'false' : 'true');
+            
+            var parentClassList = buttonElement.closest('.slds-dropdown-trigger').classList;
+            
+            if (expanded === true) {
+                parentClassList.remove(isOpenClass);
+            }
+            else {
+               parentClassList.add(isOpenClass); 
+            }
+        }
+    
+    	function copyToClipboard(text) {
+        	var aux = document.createElement("input");
+            aux.setAttribute("value", text);
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+            document.body.removeChild(aux);
+        }
+    
+        window.addEventListener('click', function(event) {
+            if(event.target.classList.contains('action-list-button') === false) {
+        		onOptionsButtonClicked(null);
+            }
+        });
+    </script>
+</apex:page>

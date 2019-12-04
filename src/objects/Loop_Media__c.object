@@ -164,6 +164,15 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Can_Download__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Can Download</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Categories__c</fullName>
         <description>Categories and Subcategories assigned to Media. Subcategories are formatted &quot;Category | Subcategory Item&quot;</description>
         <externalId>false</externalId>
@@ -186,6 +195,16 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Description_Preview__c</fullName>
+        <description>A truncated description used for previewing the description in the list view</description>
+        <externalId>false</externalId>
+        <label>Description Preview</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
         <fullName>Description__c</fullName>
         <externalId>false</externalId>
         <label>Description (Plain Text)</label>
@@ -194,6 +213,15 @@
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Download_Link__c</fullName>
+        <externalId>false</externalId>
+        <label>Download Link</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
     </fields>
     <fields>
         <fullName>Expiration_Date__c</fullName>
@@ -375,9 +403,9 @@
     <searchLayouts>
         <excludedStandardButtons>New</excludedStandardButtons>
         <excludedStandardButtons>OpenListInQuip</excludedStandardButtons>
-        <excludedStandardButtons>Accept</excludedStandardButtons>
-        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
         <excludedStandardButtons>MassChangeOwner</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
