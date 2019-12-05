@@ -47,8 +47,6 @@ public abstract class LoopMediaBaseController {
                 String[] userGroups = user.Loop_Groups__c.split(';');
                 
                 for (Loop_Media__c[] lmGroup : [FIND :this.searchString RETURNING Loop_Media__c(Id, Asset_Number__c, Title__c, Description_Preview__c, Groups__c, Is_Externally_Shareable__c, Can_Download__c, Download_Link__c, Internal_Loop_Link__c, Shareable_Link__c, Type__c, LastModifiedDate, Name Order By Sort_Title__c)]) {
-                    System.debug(lmGroup);
-                    
                     for (Loop_Media__c lm : lmGroup) {
                         String mediaGroups = ';' + lm.Groups__c + ';';
                         
