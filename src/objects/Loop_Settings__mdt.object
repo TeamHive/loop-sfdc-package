@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Loop_Widget_Subtitle__c</fullName>
+        <description>The subtitle of the Loop Widget. The text is also used in the search call to action if specified</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>The subtitle of the Loop Widget. The text is also used in the search call to action if specified</inlineHelpText>
+        <label>Loop Widget Subtitle</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sharable_Content_Only_List_Default__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether or not the Sharable Content Only will be checked by default when the Loop Media list view loads</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Whether or not the Sharable Content Only will be checked by default when the Loop Media list view loads</inlineHelpText>
+        <label>Sharable Content Only - List Default</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Sharable_Content_Only_Widget_Default__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether or not the Sharable Content Only will be checked by default when the Loop Media widget loads</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Whether or not the Sharable Content Only will be checked by default when the Loop Media widget loads</inlineHelpText>
+        <label>Sharable Content Only - Widget Default</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>View_All_Media_Location__c</fullName>
+        <description>The location to navigate the user to when the Browse Media in Loop button is clicked</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>The location to navigate the user to when the Browse Media in Loop button is clicked</inlineHelpText>
+        <label>View All Media Location</label>
+        <required>false</required>
+        <type>Url</type>
+    </fields>
+    <label>Loop Settings</label>
+    <pluralLabel>Loop Settings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

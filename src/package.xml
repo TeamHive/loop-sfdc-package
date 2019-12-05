@@ -2,11 +2,14 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Loop Connector</fullName>
     <types>
+        <members>LoopMediaBaseController</members>
+        <members>LoopMediaWidgetController</members>
         <members>UserGroupMediaListController</members>
         <members>UserGroupMediaListController_test</members>
         <name>ApexClass</name>
     </types>
     <types>
+        <members>Loop_Media_Widget</members>
         <members>User_Group_Media_List</members>
         <name>ApexPage</name>
     </types>
@@ -20,8 +23,11 @@
     </types>
     <types>
         <members>Loop_Media__c.Asset_Number__c</members>
+        <members>Loop_Media__c.Can_Download__c</members>
         <members>Loop_Media__c.Categories__c</members>
+        <members>Loop_Media__c.Description_Preview__c</members>
         <members>Loop_Media__c.Description__c</members>
+        <members>Loop_Media__c.Download_Link__c</members>
         <members>Loop_Media__c.Expiration_Date__c</members>
         <members>Loop_Media__c.Formatted_Description__c</members>
         <members>Loop_Media__c.Groups__c</members>
@@ -33,11 +39,16 @@
         <members>Loop_Media__c.Sort_Title__c</members>
         <members>Loop_Media__c.Title__c</members>
         <members>Loop_Media__c.Type__c</members>
+        <members>Loop_Settings__mdt.Loop_Widget_Subtitle__c</members>
+        <members>Loop_Settings__mdt.Sharable_Content_Only_List_Default__c</members>
+        <members>Loop_Settings__mdt.Sharable_Content_Only_Widget_Default__c</members>
+        <members>Loop_Settings__mdt.View_All_Media_Location__c</members>
         <members>User.Loop_Groups__c</members>
         <name>CustomField</name>
     </types>
     <types>
         <members>Loop_Media__c</members>
+        <members>Loop_Settings__mdt</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -49,12 +60,14 @@
         <name>FlexiPage</name>
     </types>
     <types>
+        <members>Loop_Media_Update_Description_Preview</members>
         <members>Loop_Media_Update_Sort_Title</members>
         <name>Flow</name>
     </types>
     <types>
         <members>Loop_Media__c-Loop Media Admin Layout</members>
         <members>Loop_Media__c-Loop Media Layout</members>
+        <members>Loop_Settings__mdt-Loop Setting Layout</members>
         <name>Layout</name>
     </types>
     <types>
@@ -63,7 +76,9 @@
         <name>PermissionSet</name>
     </types>
     <types>
+        <members>DownArrow</members>
         <members>LoopContent</members>
+        <members>LoopLogoWhite</members>
         <name>StaticResource</name>
     </types>
     <types>
