@@ -37,31 +37,37 @@ public abstract class LoopMediaBaseController {
     }
     
     public void search() {
-        if (this.hasSearchValue == true) {   
-            Integer currentPageSize = this.getCurrentPageSize(this.stdController);
-            
-            User user = this.getCurrentUser();
-            List<Loop_Media__c> results = new List<Loop_Media__c>();
-            
-            if (user.Loop_Groups__c != null && user.Loop_Groups__c.length() > 0) { 
-                String[] userGroups = user.Loop_Groups__c.split(';');
+        if (this.hasSearchValue == true) {
+            try {
+                Integer currentPageSize = this.getCurrentPageSize(this.stdController);
                 
-                for (Loop_Media__c[] lmGroup : [FIND :this.searchString RETURNING Loop_Media__c(Id, Asset_Number__c, Title__c, Description_Preview__c, Groups__c, Is_Externally_Shareable__c, Can_Download__c, Download_Link__c, Internal_Loop_Link__c, Shareable_Link__c, Type__c, LastModifiedDate, Name Order By Sort_Title__c)]) {
-                    for (Loop_Media__c lm : lmGroup) {
-                        String mediaGroups = ';' + lm.Groups__c + ';';
-                        
-                        for (String userGroup : userGroups) {
-                            if (mediaGroups.contains(';' + userGroup + ';') && this.satisfiesFilter(lm)) {
-                                results.add(lm);
-                                break;
+                User user = this.getCurrentUser();
+                List<Loop_Media__c> results = new List<Loop_Media__c>();
+                
+                if (user.Loop_Groups__c != null && user.Loop_Groups__c.length() > 0) { 
+                    String[] userGroups = user.Loop_Groups__c.split(';');
+                    
+                    for (Loop_Media__c[] lmGroup : [FIND :this.searchString RETURNING Loop_Media__c(Id, Asset_Number__c, Title__c, Description_Preview__c, Groups__c, Is_Externally_Shareable__c, Can_Download__c, Download_Link__c, Internal_Loop_Link__c, Shareable_Link__c, Type__c, LastModifiedDate, Name Order By Sort_Title__c)]) {
+                        for (Loop_Media__c lm : lmGroup) {
+                            String mediaGroups = ';' + lm.Groups__c + ';';
+                            
+                            for (String userGroup : userGroups) {
+                                if (mediaGroups.contains(';' + userGroup + ';') && this.satisfiesFilter(lm)) {
+                                    results.add(lm);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+                
+                this.stdController = new ApexPages.StandardSetController(results); 
+                this.stdController.setPageSize(currentPageSize);
             }
-            
-            this.stdController = new ApexPages.StandardSetController(results); 
-            this.stdController.setPageSize(currentPageSize);
+            catch(Exception e) {
+                System.debug(e.getMessage());
+                this.setQuery(this.stdController);
+            }
         }
         else {
         	this.setQuery(this.stdController);
