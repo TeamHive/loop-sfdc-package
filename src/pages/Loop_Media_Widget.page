@@ -101,6 +101,10 @@
         .data-section .pbBody {
         	overflow: initial;
         }
+        
+        .data-section td[data-label="Title"] {
+            max-width: 60vw;
+        }
         .data-section td:last-child {
         	width: 1.5rem;
         	padding-right: 10px !important;

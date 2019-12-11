@@ -112,10 +112,15 @@
         }
         
         tr *:nth-child(1) > * {
-        	max-width: 30vw !important; 
+        	max-width: 20vw !important; 
         }
         tr *:nth-child(2) > * {
         	max-width: 40vw !important; 
+        }
+
+        .data-section td:last-child {
+            width: 1.5rem;
+            padding-right: 10px !important;
         }
         
         .slds-button.action-list-button {
