@@ -46,7 +46,7 @@
             margin-right: 10px;	
         }
         .header-text-container > a {
-        	display: flex;
+        	display: inline-flex;
         	flex-direction: column;
         }
         
