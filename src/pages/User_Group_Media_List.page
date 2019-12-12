@@ -11,6 +11,7 @@
             left: 0;
             right: 0;
             background-color: rgb(176, 196, 223);
+            overflow: auto;
         }
         .slds-brand-band {
             position: fixed !important;
