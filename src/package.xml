@@ -39,15 +39,17 @@
         <members>Loop_Media__c.Sort_Title__c</members>
         <members>Loop_Media__c.Title__c</members>
         <members>Loop_Media__c.Type__c</members>
+        <members>Loop_User_Group__c.Groups__c</members>
+        <members>Loop_User_Group__c.User__c</members>
         <members>Loop_Settings__mdt.Loop_Widget_Subtitle__c</members>
         <members>Loop_Settings__mdt.Sharable_Content_Only_List_Default__c</members>
         <members>Loop_Settings__mdt.Sharable_Content_Only_Widget_Default__c</members>
         <members>Loop_Settings__mdt.View_All_Media_Location__c</members>
-        <members>User.Loop_Groups__c</members>
         <name>CustomField</name>
     </types>
     <types>
         <members>Loop_Media__c</members>
+        <members>Loop_User_Group__c</members>
         <members>Loop_Settings__mdt</members>
         <name>CustomObject</name>
     </types>

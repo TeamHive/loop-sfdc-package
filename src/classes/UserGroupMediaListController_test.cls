@@ -104,15 +104,23 @@ public class UserGroupMediaListController_test {
             LocaleSidKey='en_US', 
             ProfileId = profile.Id, 
             TimeZoneSidKey='America/New_York', 
-            UserName='standarduser@meetmaestro.com',
-            Loop_Groups__c='1;2;3'
+            UserName='standarduser@meetmaestro.com'
        	);
         
         insert testUser;
-
+        
         PermissionSet permSet = [SELECT Id FROM PermissionSet Where Name = 'Loop_Connector_View_Media'];
 		insert new PermissionSetAssignment(AssigneeId = testUser.id, PermissionSetId = permSet.Id);
 
+        // Gets around MIXED_DML_OPERATION  issue
+        System.runAs(new User(Id = Userinfo.getUserId())) {
+            Loop_User_Group__c groups = new Loop_User_Group__c(
+                Groups__c='1;2;3',
+                User__c = testUser.id
+            );
+            insert groups;
+        }
+        
         return testUser;
     }
     
