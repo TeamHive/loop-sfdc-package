@@ -41,11 +41,11 @@ public abstract class LoopMediaBaseController {
             try {
                 Integer currentPageSize = this.getCurrentPageSize(this.stdController);
                 
-                User user = this.getCurrentUser();
+                Loop_User_Group__c userGroupRecord = this.getCurrentUserGroups();
                 List<Loop_Media__c> results = new List<Loop_Media__c>();
                 
-                if (user.Loop_Groups__c != null && user.Loop_Groups__c.length() > 0) { 
-                    String[] userGroups = user.Loop_Groups__c.split(';');
+                if (userGroupRecord.Groups__c != null && userGroupRecord.Groups__c.length() > 0) { 
+                    String[] userGroups = userGroupRecord.Groups__c.split(';');
                     
                     for (Loop_Media__c[] lmGroup : [FIND :this.searchString RETURNING Loop_Media__c(Id, Asset_Number__c, Title__c, Description_Preview__c, Groups__c, Is_Externally_Shareable__c, Can_Download__c, Download_Link__c, Internal_Loop_Link__c, Shareable_Link__c, Type__c, LastModifiedDate, Name Order By Sort_Title__c)]) {
                         for (Loop_Media__c lm : lmGroup) {
@@ -122,11 +122,11 @@ public abstract class LoopMediaBaseController {
     private void setQuery(ApexPages.StandardSetController currentController) {        
         Integer currentPageSize = this.getCurrentPageSize(currentController);
         
-        User user = this.getCurrentUser();
+        Loop_User_Group__c userGroupRecord = this.getCurrentUserGroups();
         List<Loop_Media__c> results = new List<Loop_Media__c>();
         
-        if (user.Loop_Groups__c != null && user.Loop_Groups__c.length() > 0) { 
-            String[] userGroups = user.Loop_Groups__c.split(';');
+        if (userGroupRecord.Groups__c != null && userGroupRecord.Groups__c.length() > 0) { 
+            String[] userGroups = userGroupRecord.Groups__c.split(';');
                         
             for (Loop_Media__c[] lmGroup : [Select Id, Asset_Number__c, Title__c, Description_Preview__c, Groups__c, Type__c, Is_Externally_Shareable__c, Shareable_Link__c, Can_Download__c, Download_Link__c, Internal_Loop_Link__c, LastModifiedDate, Name From Loop_Media__c Order By Sort_Title__c]) {
                 for (Loop_Media__c lm : lmGroup) {
@@ -146,8 +146,14 @@ public abstract class LoopMediaBaseController {
         this.stdController.setPageSize(currentPageSize);
     }
     
-    private User getCurrentUser() {
-        return [SELECT Loop_Groups__c From User Where Id = :UserInfo.getUserId()];
+    private Loop_User_Group__c getCurrentUserGroups() {
+        List<Loop_User_Group__c> userGroups = [SELECT Groups__c From Loop_User_Group__c Where User__r.Id = :UserInfo.getUserId()];
+
+        if (userGroups.size() > 0) {
+            return userGroups[0];
+        }
+        
+        return new Loop_User_Group__c();
     }
     
     private Integer getCurrentPageSize(ApexPages.StandardSetController currentController) {
